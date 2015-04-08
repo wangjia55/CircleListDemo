@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -36,6 +37,19 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(getApplication(), "position:" + position, Toast.LENGTH_SHORT).show();
             }
         });
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                for (int i = 0; i < mListView.getChildCount(); i++) {
+                    mListView.getChildAt(i).invalidate();
+                }
+            }
+        });
     }
 
     private void initData() {
@@ -45,12 +59,14 @@ public class MainActivity extends FragmentActivity {
         AppBean appBean4 = new AppBean("Twitter", R.drawable.ic_menu_4);
         AppBean appBean5 = new AppBean("TomCat", R.drawable.ic_menu_5);
         AppBean appBean6 = new AppBean("AngryBird", R.drawable.ic_menu_6);
-        mAppBeanList.add(appBean1);
-        mAppBeanList.add(appBean2);
-        mAppBeanList.add(appBean3);
-        mAppBeanList.add(appBean4);
-        mAppBeanList.add(appBean5);
-        mAppBeanList.add(appBean6);
+        for (int i = 0; i < 10; i++) {
+            mAppBeanList.add(appBean1);
+            mAppBeanList.add(appBean2);
+            mAppBeanList.add(appBean3);
+            mAppBeanList.add(appBean4);
+            mAppBeanList.add(appBean5);
+            mAppBeanList.add(appBean6);
+        }
     }
 
 
@@ -80,6 +96,7 @@ public class MainActivity extends FragmentActivity {
             } else {
                 listItemView = (ListItemView) convertView;
             }
+            listItemView.setParentHeight(mListView.getHeight());
             AppBean appBean = getItem(position);
             listItemView.setAppBean(appBean);
             return convertView;
