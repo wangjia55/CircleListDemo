@@ -3,10 +3,13 @@ package com.jacob.circle.list;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -22,12 +25,14 @@ public class MainActivity extends FragmentActivity {
     private ListView mListView;
     private List<AppBean> mAppBeanList = new ArrayList<>();
 
+    private int mItemHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-
+        mItemHeight = getScreenHeight()/5;
         mListView = (ListView) findViewById(R.id.listView);
         MyListAdapter adapter = new MyListAdapter();
         mListView.setAdapter(adapter);
@@ -91,7 +96,7 @@ public class MainActivity extends FragmentActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             ListItemView listItemView;
             if (convertView == null) {
-                listItemView = new ListItemView(getApplication());
+                listItemView  = (ListItemView) LayoutInflater.from(getApplication()).inflate(R.layout.layout_list_item,parent,false);
                 convertView = listItemView;
             } else {
                 listItemView = (ListItemView) convertView;
@@ -103,4 +108,11 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+
+    private int getScreenHeight(){
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        return metrics.widthPixels;
+    }
 }
